@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Launch Cicada debug",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/build/bin/cicada",
+        "miDebuggerServerAddress": "10.10.10.102:2345",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceRoot}/build/",
+        "environment": [],
+        "externalConsole": true,
+        "linux": {
+          "MIMode": "gdb"
+        },
+        "osx": {
+          "MIMode": "gdb"
+        },
+        "windows": {
+          "MIMode": "gdb"
+        }
+      }
+    ]
+  }
