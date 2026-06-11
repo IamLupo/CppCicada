@@ -27,6 +27,7 @@ std::optional<std::string_view> to_latin(std::string_view rune)
 std::optional<std::string_view> to_rune(std::string_view latin)
 {
 	auto it = latin_to_index.find(latin);
+
 	if (it == latin_to_index.end())
 		return std::nullopt;
 
@@ -36,6 +37,7 @@ std::optional<std::string_view> to_rune(std::string_view latin)
 std::optional<uint8_t> to_prime(std::string_view rune)
 {
 	auto it = rune_to_index.find(rune);
+
 	if (it == rune_to_index.end())
 		return std::nullopt;
 
@@ -46,7 +48,7 @@ std::optional<std::string> to_runes(std::string_view text)
 {
 	std::string runes = std::string(text);
 	
-	for (auto& [pattern, replacement] : core::latin_to_runes)
+	for (const auto& [pattern, replacement] : core::latin_to_runes)
 	{
 		size_t pos = 0;
 

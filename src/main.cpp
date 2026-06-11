@@ -26,9 +26,9 @@ void test_pages()
 {
 	for(int page_index = 0; page_index < pages::content.size(); ++page_index)
 	{
-		auto images = pages::images[page_index];
-		auto interupters = pages::interupters[page_index];
-		auto rune_indices = pages::rune_indices[page_index];
+		const auto& images = pages::images[page_index];
+		const auto& interupters = pages::interupters[page_index];
+		const auto& rune_indices = pages::rune_indices[page_index];
 		
 		std::cout << "page_index: " << +page_index << std::endl;
 		if(images.size() >= 2)
@@ -37,12 +37,12 @@ void test_pages()
 			std::cout << "images: " << *images.begin() << std::endl;
 		
 		std::cout << "interupters: ";
-		for(auto interupter : interupters)
+		for(const auto interupter : interupters)
 			std::cout << interupter << ", ";
 		std::cout << std::endl;
 
 		std::cout << "runes: [";
-		for(auto rune_index : rune_indices)
+		for(const auto rune_index : rune_indices)
 			std::cout << core::runes[rune_index].rune << ", ";
 		std::cout << "]" << std::endl;
 		
@@ -63,8 +63,8 @@ void test_transformer()
 {
 	for (int page_index = 0; page_index < pages::images.size(); page_index++)
 	{
-		auto& images = pages::images[page_index];
-		auto& transformers = pages::transformers[page_index];
+		const auto& images = pages::images[page_index];
+		const auto& transformers = pages::transformers[page_index];
 		
 		util::screen::clear();
 
@@ -103,14 +103,14 @@ void test_latin()
 void test_math()
 {
 	std::cout << "primes: ";
-	for (auto p : math::primes_1000)
+	for (const auto p : math::primes_1000)
 	{
 		std::cout << p << ", ";
 	}
 	std::cout << "\n";
 
 	std::cout << "primes_totient: ";
-	for (auto p : math::primes_totient_1000)
+	for (const auto p : math::primes_totient_1000)
 	{
 		std::cout << p << ", ";
 	}
@@ -121,8 +121,8 @@ void test_speed()
 {
 	for (int page_index = 0; page_index < pages::images.size(); page_index++)
 	{
-		auto& images = pages::images[page_index];
-		auto& transformers = pages::transformers[page_index];
+		const auto& images = pages::images[page_index];
+		const auto& transformers = pages::transformers[page_index];
 		
 		ProcessedText pt(page_index);
 
