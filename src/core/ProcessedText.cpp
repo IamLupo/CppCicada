@@ -6,7 +6,6 @@
 
 #include <core/Transformer.h>
 
-
 ProcessedText::ProcessedText()
 {
 

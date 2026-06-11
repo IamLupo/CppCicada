@@ -1,4 +1,7 @@
+#include <map>
+
 #include <core.h>
+#include <utf8.h>
 
 namespace core
 {
@@ -14,29 +17,11 @@ void initialize()
 std::optional<std::string_view> to_latin(std::string_view rune)
 {
 	auto it = rune_to_index.find(rune);
+
 	if (it == rune_to_index.end())
 		return std::nullopt;
 
 	return RUNE_TABLE[it->second].latin;
-}
-
-std::optional<std::vector<uint8_t>> to_rune_indices(std::string_view text)
-{
-	std::vector<uint8_t> rune_indices;
-
-	for(auto& s : text)
-	{
-		std::string_view key(&s, 1);
-
-		auto it = latin_to_index.find(key);
-
-		if (it == latin_to_index.end())
-			return std::nullopt;
-
-		rune_indices.push_back(it->second);
-	}
-
-	return rune_indices;
 }
 
 std::optional<std::string_view> to_rune(std::string_view latin)
@@ -55,6 +40,49 @@ std::optional<uint8_t> to_prime(std::string_view rune)
 		return std::nullopt;
 
 	return RUNE_TABLE[it->second].prime;
+}
+
+std::optional<std::string> to_runes(std::string_view text)
+{
+	std::string runes = std::string(text);
+	
+	for (auto& [pattern, replacement] : core::latin_to_runes)
+	{
+		size_t pos = 0;
+
+		while ((pos = runes.find(pattern, pos)) != std::string::npos)
+		{
+			runes.replace(pos, pattern.size(), replacement);
+			pos += replacement.size(); // length of replacement
+		}
+	}
+
+	return runes;
+}
+
+std::optional<std::vector<uint8_t>> to_rune_indices(const std::string& runes)
+{
+	std::vector<uint8_t> rune_indices;
+
+	// Iterate through all content
+	for (size_t i = 0; i < runes.size();)
+	{
+		// Calculate length of utf8 bytes
+		size_t len = utf8_char_length(static_cast<unsigned char>(runes[i]));
+
+		// Read the utf8 character
+		std::string_view rune = runes.substr(i, len);
+
+		auto it = core::rune_to_index.find(rune);
+		if (it == core::rune_to_index.end())
+			return std::nullopt;
+
+		rune_indices.push_back(it->second);
+
+		i += len;
+	}
+
+	return rune_indices;
 }
 
 } // namespace core

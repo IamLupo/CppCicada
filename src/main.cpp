@@ -6,6 +6,7 @@
 #include <pages.h>
 #include <core/ProcessedText.h>
 #include <transformer/Atbash.h>
+#include <limits>
 
 void test_runes()
 {
@@ -55,19 +56,61 @@ void test_processed_text()
 	std::cout << pt2.get_latin_text() << std::endl;
 }
 
+void clear_screen()
+{
+#ifdef _WIN32
+    std::system("cls");
+#else
+    std::system("clear");
+#endif
+}
+
+void wait_for_enter()
+{
+    std::cout << "Press Enter to continue...";
+
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 void test_transformer()
 {
-	for(const auto& it : G_PAGES_TRANSFORMERS)
+	for (auto& [page_index, transformers] : G_PAGES_TRANSFORMERS)
 	{
-		std::cout << "page_index: " << it.first << std::endl;
+		auto images = G_PAGES_IMAGES[page_index];
+		
+		clear_screen();
 
-		ProcessedText pt(it.first);
+		std::cout << "page_index: " << page_index << std::endl;
+		if(images.size() >= 2)
+			std::cout << "images: " << *images.begin() << " till " << *(--images.end()) << std::endl;
+		else
+			std::cout << "images: " << *images.begin() << std::endl;
 
-		for (const std::unique_ptr<Transformer>& tf : it.second)
+		ProcessedText pt(page_index);
+
+		for (const std::unique_ptr<Transformer>& tf : transformers)
 			tf->transform(pt);
 		
 		std::cout << pt.get_latin_text() << std::endl;
+
+		wait_for_enter();
 	}
+}
+
+void test_latin()
+{
+	std::string runes;
+	std::vector<uint8_t> rune_indices;
+
+	std::cout << "core::to_runes(\"RING\").value_or(\"\")" << std::endl;
+
+	runes = core::to_runes("RING").value_or("");
+	std::cout << "runes: " << runes << std::endl;
+
+	rune_indices = core::to_rune_indices(runes).value_or(std::vector<uint8_t>({}));
+	std::cout << rune_indices.size() << std::endl;
+	
 }
 
 int main()
@@ -80,4 +123,5 @@ int main()
 	//test_pages();
 	//test_processed_text();
 	test_transformer();
+	//test_latin();
 }

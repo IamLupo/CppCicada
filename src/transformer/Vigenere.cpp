@@ -8,7 +8,9 @@
 VigenereTransformer::VigenereTransformer(const std::string_view& key, const std::vector<size_t>& interrupt_indices)
 		: _interrupt_indices(interrupt_indices)
 {
-	this->_key = core::to_rune_indices(key).value_or(std::vector<uint8_t>({}));
+	std::string runes = core::to_runes(std::string(key)).value_or("");
+
+	this->_key = core::to_rune_indices(runes).value_or(std::vector<uint8_t>({}));
 }
 
 void VigenereTransformer::transform(ProcessedText& pt)

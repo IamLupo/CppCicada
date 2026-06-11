@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <optional>
 #include <vector>
+#include <string>
  
 namespace core
 {
@@ -69,13 +70,59 @@ namespace core
 	inline std::unordered_map<std::string_view, size_t> rune_to_index;
 	inline std::unordered_map<std::string_view, size_t> latin_to_index;
 
+	inline const std::vector<std::pair<std::string, std::string>> latin_to_runes = {
+		// Latin values that are the same rune
+		{ "ING", "NG"  },	// BEING       -> BENG
+		{ "ION", "IAN" },	// INSTRUCTION -> INSTRVCTIAN
+		{ "QU",  "CW"  },	// QUESTION    -> QWESTIAN
+		{ "K",   "C"   },	// BOOC        -> BOOK
+		{ "U",   "V"   },	// OUR         -> OVR
+		{ "Z",   "S"   },	// 
+		{ "Q",   "C"   },	// 
+		
+		// Double latin values
+		{"TH", "ᚦ"},
+		{"EO", "ᛇ"},
+		{"NG", "ᛝ"},
+		{"OE", "ᛟ"},
+		{"AE", "ᚫ"},
+		{"IA", "ᛡ"},
+		{"EA", "ᛠ"},
+
+		// Single latin values
+		{"F", "ᚠ"},
+		{"V", "ᚢ"},
+		{"O", "ᚩ"},
+		{"R", "ᚱ"},
+		{"C", "ᚳ"},
+		{"G", "ᚷ"},
+		{"W", "ᚹ"},
+		{"H", "ᚻ"},
+		{"N", "ᚾ"},
+		{"I", "ᛁ"},
+		{"J", "ᛄ"},
+		{"P", "ᛈ"},
+		{"X", "ᛉ"},
+		{"S", "ᛋ"},
+		{"T", "ᛏ"},
+		{"B", "ᛒ"},
+		{"E", "ᛖ"},
+		{"M", "ᛗ"},
+		{"L", "ᛚ"},
+		{"D", "ᛞ"},
+		{"A", "ᚪ"},
+		{"Y", "ᚣ"}
+	};
+
 	// Functions
 	void initialize();
 
 	std::optional<std::string_view> to_latin(std::string_view rune);
 	std::optional<std::string_view> to_rune(std::string_view latin);
-	std::optional<std::vector<uint8_t>> to_rune_indices(std::string_view text);
 	std::optional<uint8_t> to_prime(std::string_view rune);
+
+	std::optional<std::vector<uint8_t>> to_rune_indices(const std::string& runes);
+	std::optional<std::string> to_runes(std::string_view text);
 
 	namespace unsafe
 	{

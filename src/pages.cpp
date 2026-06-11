@@ -4,6 +4,7 @@
 #include <core/Transformer.h>
 #include <transformer/Atbash.h>
 #include <transformer/Vigenere.h>
+#include <transformer/Shift.h>
 
 namespace pages
 {
@@ -45,18 +46,32 @@ void initialize()
 		G_PAGES_RUNE_INDICES[page_index] = rune_indices;
 	}
 
-	// Solutions
-	//G_PAGES_TRANSFORMERS[0].clear();
-	G_PAGES_TRANSFORMERS[1].clear();
-	//G_PAGES_TRANSFORMERS[2].clear();
-	//G_PAGES_TRANSFORMERS[4].clear();
+	// Set solutions order
+	for(int page_index = 6; page_index >= 0; page_index--)
+	{
+		G_PAGES_TRANSFORMERS[page_index].clear();
+	}
 
-	//G_PAGES_TRANSFORMERS[0].push_back(std::make_unique<AtbashTransformer>());
+	// Set solutions transformers
+	G_PAGES_TRANSFORMERS[0].push_back(std::make_unique<AtbashTransformer>());
+
 	G_PAGES_TRANSFORMERS[1].push_back(
 		std::make_unique<VigenereTransformer>(
-			"DIVINITY", std::vector<size_t>{48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514}
-		)
-	);
+			"DIVINITY", // DIVINITY = ᛞᛁᚢᛁᚾᛁᛏᚣ
+			std::vector<size_t>{ 48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514 }
+	));
+	
+	G_PAGES_TRANSFORMERS[3].push_back(std::make_unique<AtbashTransformer>());
+	G_PAGES_TRANSFORMERS[3].push_back(std::make_unique<ShiftTransformer>(
+			3, std::vector<size_t>({})
+	));
+
+	G_PAGES_TRANSFORMERS[5].push_back(
+		std::make_unique<VigenereTransformer>(
+			// "CIRCVMFERENCE", // CIRCVMFERENCE = ᚳᛁᚱᚳᚢᛗᚠᛖᚱᛖᚾᚳᛖ
+			"FIRFVMFERENFE", // FIRFVMFERENFE = ᚠᛁᚱᚠᚢᛗᚠᛖᚱᛖᚾᚠᛖ
+			std::vector<size_t>{ 49, 58 }
+	));
 }
 
 } // namespace pages

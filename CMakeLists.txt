@@ -22,6 +22,7 @@ add_executable(cicada
 	src/core/ProcessedText.cpp
 	src/transformer/Atbash.cpp
 	src/transformer/Vigenere.cpp
+	src/transformer/Shift.cpp
 	src/pages.cpp
     src/main.cpp
 )
