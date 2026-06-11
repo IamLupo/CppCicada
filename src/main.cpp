@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <limits>
+#include <thread>
 
 #include <version.h>
 #include <core.h>
@@ -9,7 +10,6 @@
 #include <math/totient.h>
 #include <core/ProcessedText.h>
 #include <transformer/Atbash.h>
-
 
 void test_runes()
 {
@@ -134,6 +134,49 @@ void test_math()
 	std::cout << "\n";
 }
 
+void test_speed()
+{
+	for (int page_index = 0; page_index < G_PAGES_IMAGES.size(); page_index++)
+	{
+		auto& images = G_PAGES_IMAGES[page_index];
+		auto& transformers = G_PAGES_TRANSFORMERS[page_index];
+		
+		ProcessedText pt(page_index);
+
+		for (const std::unique_ptr<Transformer>& tf : transformers)
+			tf->transform(pt);
+		
+		std::string text = pt.get_latin_text();
+	}
+}
+
+void test_singlethread()
+{
+	for(int i = 0; i < 100000; i++)
+	{
+		test_speed();
+	}
+}
+
+void test_multithread()
+{
+	std::vector<std::thread> threads;
+	
+	for(int i = 0; i < 10; i++)
+	{
+		threads.emplace_back([&]()
+		{
+			for(int i = 0; i < 10000; i++)
+			{
+				test_speed();
+			}
+		});
+	}
+
+	for(auto& t : threads)
+		t.join();
+}
+
 int main()
 {
 	/* Initialize */
@@ -143,7 +186,9 @@ int main()
 	//test_runes();	
 	//test_pages();
 	//test_processed_text();
-	test_transformer();
+	//test_transformer();
 	//test_latin();
 	//test_math();
+	//test_singlethread();
+	test_multithread();
 }
