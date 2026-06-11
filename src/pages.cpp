@@ -5,6 +5,7 @@
 #include <transformer/Atbash.h>
 #include <transformer/Vigenere.h>
 #include <transformer/Shift.h>
+#include <transformer/Totient.h>
 
 namespace pages
 {
@@ -44,15 +45,9 @@ void initialize()
 		// Save results
 		G_PAGES_INTERUPTERS[page_index] = interupters;
 		G_PAGES_RUNE_INDICES[page_index] = rune_indices;
-	}
-
-	// Set solutions order
-	for(int page_index = 6; page_index >= 0; page_index--)
-	{
 		G_PAGES_TRANSFORMERS[page_index].clear();
 	}
 
-	// Set solutions transformers
 	G_PAGES_TRANSFORMERS[0].push_back(std::make_unique<AtbashTransformer>());
 
 	G_PAGES_TRANSFORMERS[1].push_back(
@@ -60,7 +55,7 @@ void initialize()
 			"DIVINITY", // DIVINITY = ᛞᛁᚢᛁᚾᛁᛏᚣ
 			std::vector<size_t>{ 48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514 }
 	));
-	
+
 	G_PAGES_TRANSFORMERS[3].push_back(std::make_unique<AtbashTransformer>());
 	G_PAGES_TRANSFORMERS[3].push_back(std::make_unique<ShiftTransformer>(
 			3, std::vector<size_t>({})
@@ -71,6 +66,21 @@ void initialize()
 			// "CIRCVMFERENCE", // CIRCVMFERENCE = ᚳᛁᚱᚳᚢᛗᚠᛖᚱᛖᚾᚳᛖ
 			"FIRFVMFERENFE", // FIRFVMFERENFE = ᚠᛁᚱᚠᚢᛗᚠᛖᚱᛖᚾᚠᛖ
 			std::vector<size_t>{ 49, 58 }
+	));
+	
+	G_PAGES_TRANSFORMERS[7].push_back(std::make_unique<UnsolvedTransformer>());
+	G_PAGES_TRANSFORMERS[8].push_back(std::make_unique<UnsolvedTransformer>());
+	G_PAGES_TRANSFORMERS[9].push_back(std::make_unique<UnsolvedTransformer>());
+	G_PAGES_TRANSFORMERS[10].push_back(std::make_unique<UnsolvedTransformer>());
+	G_PAGES_TRANSFORMERS[11].push_back(std::make_unique<UnsolvedTransformer>());
+	G_PAGES_TRANSFORMERS[12].push_back(std::make_unique<UnsolvedTransformer>());
+	G_PAGES_TRANSFORMERS[13].push_back(std::make_unique<UnsolvedTransformer>());
+	G_PAGES_TRANSFORMERS[14].push_back(std::make_unique<UnsolvedTransformer>());
+	G_PAGES_TRANSFORMERS[15].push_back(std::make_unique<UnsolvedTransformer>());
+
+	G_PAGES_TRANSFORMERS[16].push_back(
+		std::make_unique<TotientTransformer>(
+			std::vector<size_t>{ 56 }
 	));
 }
 

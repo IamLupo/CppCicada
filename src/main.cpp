@@ -1,12 +1,15 @@
 #include <iostream>
 #include <memory>
+#include <limits>
 
 #include <version.h>
 #include <core.h>
 #include <pages.h>
+#include <math/prime.h>
+#include <math/totient.h>
 #include <core/ProcessedText.h>
 #include <transformer/Atbash.h>
-#include <limits>
+
 
 void test_runes()
 {
@@ -75,9 +78,10 @@ void wait_for_enter()
 
 void test_transformer()
 {
-	for (auto& [page_index, transformers] : G_PAGES_TRANSFORMERS)
+	for (int page_index = 0; page_index < G_PAGES_IMAGES.size(); page_index++)
 	{
-		auto images = G_PAGES_IMAGES[page_index];
+		auto& images = G_PAGES_IMAGES[page_index];
+		auto& transformers = G_PAGES_TRANSFORMERS[page_index];
 		
 		clear_screen();
 
@@ -113,6 +117,23 @@ void test_latin()
 	
 }
 
+void test_math()
+{
+	std::cout << "primes: ";
+	for (auto p : math::primes_1000)
+	{
+		std::cout << p << ", ";
+	}
+	std::cout << "\n";
+
+	std::cout << "primes_totient: ";
+	for (auto p : math::primes_totient_1000)
+	{
+		std::cout << p << ", ";
+	}
+	std::cout << "\n";
+}
+
 int main()
 {
 	/* Initialize */
@@ -124,4 +145,5 @@ int main()
 	//test_processed_text();
 	test_transformer();
 	//test_latin();
+	//test_math();
 }

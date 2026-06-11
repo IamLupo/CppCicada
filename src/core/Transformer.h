@@ -5,15 +5,23 @@
 #include <vector>
 #include <cstdint>
 
-class ProcessedText;
+#include <core/ProcessedText.h>
 
 class Transformer
 {
-	//private:
 	public:
 		virtual ~Transformer() = default;
 
 		virtual void transform(ProcessedText& pt) = 0;
+};
+
+class UnsolvedTransformer : public Transformer
+{
+	public:
+		void transform(ProcessedText& pt) override
+		{
+			pt.SetUnsolved();
+		};
 };
 
 #endif // TRANSFORMER_H

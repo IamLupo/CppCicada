@@ -23,6 +23,7 @@ add_executable(cicada
 	src/transformer/Atbash.cpp
 	src/transformer/Vigenere.cpp
 	src/transformer/Shift.cpp
+	src/transformer/Totient.cpp
 	src/pages.cpp
     src/main.cpp
 )
