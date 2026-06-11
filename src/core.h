@@ -24,7 +24,7 @@ namespace core
 		std::string_view value;
 	};
 
-	inline constexpr std::array<CharMap, 8> G_PUNCT = {{
+	inline constexpr std::array<CharMap, 8> punctuation = {{
 		{'.', ".\n"},
 		{'-', " "},
 		{'%', "\n\n"},
@@ -35,7 +35,7 @@ namespace core
 		{'#', "\""}
 	}};
 
-	inline constexpr std::array<RuneEntry, 29> RUNE_TABLE = {{
+	inline constexpr std::array<RuneEntry, 29> runes = {{
 		{"ᚠ", "F", 2},
 		{"ᚢ", "V", 3},
 		{"ᚦ", "TH", 5},
@@ -128,17 +128,17 @@ namespace core
 	{
 		inline std::string_view to_latin(std::string_view rune)
 		{
-			return RUNE_TABLE[rune_to_index[rune]].latin;
+			return core::runes[rune_to_index[rune]].latin;
 		}
 
 		inline std::string_view to_rune(std::string_view latin)
 		{
-			return RUNE_TABLE[latin_to_index[latin]].rune;
+			return core::runes[latin_to_index[latin]].rune;
 		}
 
 		inline uint8_t to_prime(std::string_view rune)
 		{
-			return RUNE_TABLE[rune_to_index[rune]].prime;
+			return core::runes[rune_to_index[rune]].prime;
 		}
 
 		constexpr std::optional<std::string_view> punct_map(std::string_view sv)
@@ -148,7 +148,7 @@ namespace core
 
 			char c = sv[0];
 			
-			for (const auto& p : G_PUNCT)
+			for (const auto& p : core::punctuation)
 			{
 				if (p.key == c)
 					return p.value;

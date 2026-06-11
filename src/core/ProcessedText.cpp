@@ -51,7 +51,7 @@ std::string ProcessedText::get_latin_text()
 			size_t rune_index = this->_rune_indices[rune_pos];
 
 			// Save the latin in result
-			s += core::RUNE_TABLE[rune_index].latin;
+			s += core::runes[rune_index].latin;
 
 			// Next rune position
 			rune_pos++;

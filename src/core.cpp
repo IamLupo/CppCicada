@@ -7,10 +7,10 @@ namespace core
 {
 void initialize()
 {
-	for (size_t i = 0; i < RUNE_TABLE.size(); ++i)
+	for (size_t i = 0; i < core::runes.size(); ++i)
 	{
-		rune_to_index[RUNE_TABLE[i].rune] = i;
-		latin_to_index[RUNE_TABLE[i].latin] = i;
+		rune_to_index[core::runes[i].rune] = i;
+		latin_to_index[core::runes[i].latin] = i;
 	}
 }
 
@@ -21,7 +21,7 @@ std::optional<std::string_view> to_latin(std::string_view rune)
 	if (it == rune_to_index.end())
 		return std::nullopt;
 
-	return RUNE_TABLE[it->second].latin;
+	return core::runes[it->second].latin;
 }
 
 std::optional<std::string_view> to_rune(std::string_view latin)
@@ -30,7 +30,7 @@ std::optional<std::string_view> to_rune(std::string_view latin)
 	if (it == latin_to_index.end())
 		return std::nullopt;
 
-	return RUNE_TABLE[it->second].rune;
+	return core::runes[it->second].rune;
 }
 
 std::optional<uint8_t> to_prime(std::string_view rune)
@@ -39,7 +39,7 @@ std::optional<uint8_t> to_prime(std::string_view rune)
 	if (it == rune_to_index.end())
 		return std::nullopt;
 
-	return RUNE_TABLE[it->second].prime;
+	return core::runes[it->second].prime;
 }
 
 std::optional<std::string> to_runes(std::string_view text)

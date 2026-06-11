@@ -13,9 +13,9 @@
 
 void test_runes()
 {
-	std::cout << core::RUNE_TABLE[1].rune << std::endl;
-	std::cout << core::RUNE_TABLE[1].latin << std::endl;
-	std::cout << +core::RUNE_TABLE[1].prime << std::endl;
+	std::cout << core::runes[1].rune << std::endl;
+	std::cout << core::runes[1].latin << std::endl;
+	std::cout << +core::runes[1].prime << std::endl;
 
 	std::cout << core::to_rune("V").value_or("?") << std::endl;
 	std::cout << core::to_rune("LOL").value_or("?") << std::endl;
@@ -43,7 +43,7 @@ void test_pages()
 
 		std::cout << "runes: [";
 		for(auto rune_index : rune_indices)
-			std::cout << core::RUNE_TABLE[rune_index].rune << ", ";
+			std::cout << core::runes[rune_index].rune << ", ";
 		std::cout << "]" << std::endl;
 		
 		std::cout << "content: " << pages::content[page_index] << std::endl;
