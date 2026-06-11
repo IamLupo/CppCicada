@@ -12,8 +12,8 @@ ProcessedText::ProcessedText()
 ProcessedText::ProcessedText(size_t page_index)
 		: _unsolved(false)
 {
-	this->_content = G_PAGES_CONTENT[page_index];
-	this->_rune_indices = G_PAGES_RUNE_INDICES[page_index]; 
+	this->_content = pages::content[page_index];
+	this->_rune_indices = pages::rune_indices[page_index]; 
 }
 
 ProcessedText::ProcessedText(const std::string_view& content, const std::vector<uint8_t>& rune_indices)

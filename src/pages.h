@@ -10,29 +10,35 @@
 
 class Transformer;
 
-inline std::vector<std::vector<std::string_view>> G_PAGES_IMAGES = {
-	{"01.jpg"},                                                                         // Solved: AtBash
-	{"03.jpg", "04.jpg"},                                                               // Solved: Vigenere
-	{"05.jpg"},                                                                         // Solved: Gematria Primus
-	{"06.jpg", "07.jpg", "08.jpg", "09.jpg"},                                           // Solved: Atbash + Shift
-	{"10.jpg", "11.jpg", "12.jpg", "13.jpg"},                                           // Solved: Gematria Primus
-	{"14.jpg", "15.jpg"},                                                               // Solved: Vigenere
-	{"16.jpg"},                                                                         // Solved: Gematria Primus
-	{"17.jpg", "18.jpg", "19.jpg"},
-	{"20.jpg", "21.jpg", "22.jpg", "23.jpg", "24.jpg"},
-	{"25.jpg", "26.jpg", "27.jpg", "28.jpg", "29.jpg", "30.jpg", "31.jpg"},
-	{"32.jpg", "32.jpg", "33.jpg", "34.jpg", "35.jpg", "36.jpg", "37.jpg", "38.jpg", "39.jpg"},
-	{"40.jpg", "41.jpg", "42.jpg", "43.jpg"},
-	{"44.jpg", "45.jpg", "46.jpg", "47.jpg", "48.jpg", "49.jpg"},
-	{"50.jpg", "51.jpg", "52.jpg", "53.jpg", "54.jpg", "55.jpg", "56.jpg"},
-	{"57.jpg", "58.jpg", "59.jpg", "60.jpg", "61.jpg", "62.jpg", "63.jpg", "64.jpg",
-	 "65.jpg", "66.jpg", "67.jpg", "68.jpg", "69.jpg", "70.jpg"},
-	{"71.jpg", "72.jpg"},
-	{"73.jpg"},                                                                         // Solved: Totient
-	{"74.jpg"},                                                                         // Solved: Gematria Primes
-};
+namespace pages
+{
+	inline std::unordered_map<size_t, std::vector<size_t> > interupters;
+	inline std::unordered_map<size_t, std::vector<uint8_t> > rune_indices;
+	inline std::unordered_map<size_t, std::vector<std::unique_ptr<Transformer>> > transformers;
 
-inline constexpr std::array<const std::string_view, 18> G_PAGES_CONTENT = {
+	inline std::vector<std::vector<std::string_view>> images = {
+		{"01.jpg"},                                                                         // Solved: AtBash
+		{"03.jpg", "04.jpg"},                                                               // Solved: Vigenere
+		{"05.jpg"},                                                                         // Solved: Gematria Primus
+		{"06.jpg", "07.jpg", "08.jpg", "09.jpg"},                                           // Solved: Atbash + Shift
+		{"10.jpg", "11.jpg", "12.jpg", "13.jpg"},                                           // Solved: Gematria Primus
+		{"14.jpg", "15.jpg"},                                                               // Solved: Vigenere
+		{"16.jpg"},                                                                         // Solved: Gematria Primus
+		{"17.jpg", "18.jpg", "19.jpg"},
+		{"20.jpg", "21.jpg", "22.jpg", "23.jpg", "24.jpg"},
+		{"25.jpg", "26.jpg", "27.jpg", "28.jpg", "29.jpg", "30.jpg", "31.jpg"},
+		{"32.jpg", "32.jpg", "33.jpg", "34.jpg", "35.jpg", "36.jpg", "37.jpg", "38.jpg", "39.jpg"},
+		{"40.jpg", "41.jpg", "42.jpg", "43.jpg"},
+		{"44.jpg", "45.jpg", "46.jpg", "47.jpg", "48.jpg", "49.jpg"},
+		{"50.jpg", "51.jpg", "52.jpg", "53.jpg", "54.jpg", "55.jpg", "56.jpg"},
+		{"57.jpg", "58.jpg", "59.jpg", "60.jpg", "61.jpg", "62.jpg", "63.jpg", "64.jpg",
+		"65.jpg", "66.jpg", "67.jpg", "68.jpg", "69.jpg", "70.jpg"},
+		{"71.jpg", "72.jpg"},
+		{"73.jpg"},                                                                         // Solved: Totient
+		{"74.jpg"},                                                                         // Solved: Gematria Primes
+	};
+
+	inline constexpr std::array<const std::string_view, 18> content = {
 // Apply what we learned in Gematria Primes subsitution table (aka atbash)
 //
 // images: 01.jpg
@@ -984,13 +990,9 @@ R"(ᛈᚪᚱᚪᛒᛚᛖ.ᛚᛁᚳᛖ-ᚦᛖ-ᛁᚾᛋᛏᚪᚱ-ᛏ/
 ᛖ-ᛞᛁᚢᛁᚾᛁᛏᚣ-ᚹᛁᚦᛁᚾ-ᚪᚾᛞ-ᛖᛗᛖᚱᚷᛖ./)"
 };
 
-inline std::unordered_map<size_t, std::vector<size_t> > G_PAGES_INTERUPTERS;
-inline std::unordered_map<size_t, std::vector<uint8_t> > G_PAGES_RUNE_INDICES;
-inline std::unordered_map<size_t, std::vector<std::unique_ptr<Transformer>> > G_PAGES_TRANSFORMERS;
-
-namespace pages
-{
+	// Functions
 	void initialize();
+
 } // namespace pages
 
 #endif // PAGES_H

@@ -24,11 +24,11 @@ void test_runes()
 
 void test_pages()
 {
-	for(int page_index = 0; page_index < G_PAGES_CONTENT.size(); ++page_index)
+	for(int page_index = 0; page_index < pages::content.size(); ++page_index)
 	{
-		auto images = G_PAGES_IMAGES[page_index];
-		auto interupters = G_PAGES_INTERUPTERS[page_index];
-		auto rune_indices = G_PAGES_RUNE_INDICES[page_index];
+		auto images = pages::images[page_index];
+		auto interupters = pages::interupters[page_index];
+		auto rune_indices = pages::rune_indices[page_index];
 		
 		std::cout << "page_index: " << +page_index << std::endl;
 		if(images.size() >= 2)
@@ -46,7 +46,7 @@ void test_pages()
 			std::cout << core::RUNE_TABLE[rune_index].rune << ", ";
 		std::cout << "]" << std::endl;
 		
-		std::cout << "content: " << G_PAGES_CONTENT[page_index] << std::endl;
+		std::cout << "content: " << pages::content[page_index] << std::endl;
 	}
 }
 
@@ -61,10 +61,10 @@ void test_processed_text()
 
 void test_transformer()
 {
-	for (int page_index = 0; page_index < G_PAGES_IMAGES.size(); page_index++)
+	for (int page_index = 0; page_index < pages::images.size(); page_index++)
 	{
-		auto& images = G_PAGES_IMAGES[page_index];
-		auto& transformers = G_PAGES_TRANSFORMERS[page_index];
+		auto& images = pages::images[page_index];
+		auto& transformers = pages::transformers[page_index];
 		
 		util::screen::clear();
 
@@ -119,10 +119,10 @@ void test_math()
 
 void test_speed()
 {
-	for (int page_index = 0; page_index < G_PAGES_IMAGES.size(); page_index++)
+	for (int page_index = 0; page_index < pages::images.size(); page_index++)
 	{
-		auto& images = G_PAGES_IMAGES[page_index];
-		auto& transformers = G_PAGES_TRANSFORMERS[page_index];
+		auto& images = pages::images[page_index];
+		auto& transformers = pages::transformers[page_index];
 		
 		ProcessedText pt(page_index);
 
