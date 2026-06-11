@@ -169,9 +169,11 @@ int main()
 	//test_runes();	
 	//test_pages();
 	//test_processed_text();
-	//test_transformer();
 	//test_latin();
 	//test_math();
+	
+	test_transformer();
+	
 	//test_singlethread();
-	test_multithread();
+	//test_multithread();
 }
