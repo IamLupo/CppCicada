@@ -1,10 +1,8 @@
-#include <core/ProcessedText.h>
-
 #include <core.h>
 #include <pages.h>
-#include <utf8.h>
-
-#include <core/Transformer.h>
+#include <util/utf8.h>
+#include <core/ProcessedText.h>
+#include <transformer/Transformer.h>
 
 ProcessedText::ProcessedText()
 		: _unsolved(false)
@@ -41,7 +39,7 @@ std::string ProcessedText::get_latin_text()
 	for (size_t i = 0; i < this->_content.size();)
 	{
 		// Calculate length of utf8 bytes
-		size_t len = utf8_char_length(static_cast<unsigned char>(this->_content[i]));
+		size_t len = util::utf8_char_length(static_cast<unsigned char>(this->_content[i]));
 
 		// Read the utf8 character
 		std::string_view c = this->_content.substr(i, len);

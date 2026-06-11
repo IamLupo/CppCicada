@@ -1,12 +1,16 @@
 #ifndef TRANSFORMER_ATBASH_H
 #define TRANSFORMER_ATBASH_H
 
-#include <core/Transformer.h>
+#include <transformer/Transformer.h>
 
-class AtbashTransformer : public Transformer
+namespace transformer
 {
-	public:
-		void transform(ProcessedText& pt) override;
-};
+	class Atbash : public Transformer
+	{
+		public:
+			void transform(ProcessedText& pt) override;
+	};
+
+} // namespace transformer
 
 #endif // TRANSFORMER_ATBASH_H

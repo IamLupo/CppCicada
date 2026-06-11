@@ -1,17 +1,21 @@
 #ifndef TRANSFORMER_TOTIENT_H
 #define TRANSFORMER_TOTIENT_H
 
-#include <core/Transformer.h>
+#include <transformer/Transformer.h>
 
-class TotientTransformer : public Transformer
+namespace transformer
 {
-	private:
-		std::vector<size_t>  _interrupt_indices;
+	class Totient : public Transformer
+	{
+		private:
+			std::vector<size_t>  _interrupt_indices;
 
-	public:
-		TotientTransformer(const std::vector<size_t>& interrupt_indices);
-		
-		void transform(ProcessedText& pt) override;
-};
+		public:
+			Totient(const std::vector<size_t>& interrupt_indices);
+			
+			void transform(ProcessedText& pt) override;
+	};
+
+} // namespace transformer
 
 #endif // TRANSFORMER_TOTIENT_H

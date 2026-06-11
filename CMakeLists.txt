@@ -24,6 +24,7 @@ add_executable(cicada
 	src/transformer/Vigenere.cpp
 	src/transformer/Shift.cpp
 	src/transformer/Totient.cpp
+    src/util/screen.cpp
 	src/pages.cpp
     src/main.cpp
 )

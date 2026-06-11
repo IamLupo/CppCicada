@@ -1,11 +1,13 @@
-#include <transformer/Vigenere.h>
-
 #include <algorithm>
 
 #include <core.h>
 #include <core/ProcessedText.h>
+#include <transformer/Vigenere.h>
 
-VigenereTransformer::VigenereTransformer(const std::string_view& key, const std::vector<size_t>& interrupt_indices)
+namespace transformer
+{
+
+Vigenere::Vigenere(const std::string_view& key, const std::vector<size_t>& interrupt_indices)
 		: _interrupt_indices(interrupt_indices)
 {
 	std::string runes = core::to_runes(std::string(key)).value_or("");
@@ -13,7 +15,7 @@ VigenereTransformer::VigenereTransformer(const std::string_view& key, const std:
 	this->_key = core::to_rune_indices(runes).value_or(std::vector<uint8_t>({}));
 }
 
-void VigenereTransformer::transform(ProcessedText& pt)
+void Vigenere::transform(ProcessedText& pt)
 {
 	auto& rune_indices = pt.rune_indices();
 	int interups = 0;
@@ -32,3 +34,5 @@ void VigenereTransformer::transform(ProcessedText& pt)
 		}
 	}
 }
+
+} // namespace transformer

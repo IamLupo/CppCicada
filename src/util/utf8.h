@@ -1,5 +1,10 @@
+#ifndef UTIL_UTF8_H
+#define UTIL_UTF8_H
+
 #include <stdexcept>
 
+namespace util
+{
 inline size_t utf8_char_length(unsigned char c)
 {
     if ((c & 0x80) == 0x00) return 1;
@@ -9,3 +14,5 @@ inline size_t utf8_char_length(unsigned char c)
 
     throw std::runtime_error("Invalid UTF-8");
 }
+}
+#endif // UTIL_UTF8_H

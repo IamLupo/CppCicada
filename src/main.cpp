@@ -1,11 +1,11 @@
 #include <iostream>
 #include <memory>
-#include <limits>
 #include <thread>
 
 #include <version.h>
 #include <core.h>
 #include <pages.h>
+#include <util/screen.h>
 #include <math/prime.h>
 #include <math/totient.h>
 #include <core/ProcessedText.h>
@@ -59,23 +59,6 @@ void test_processed_text()
 	std::cout << pt2.get_latin_text() << std::endl;
 }
 
-void clear_screen()
-{
-#ifdef _WIN32
-    std::system("cls");
-#else
-    std::system("clear");
-#endif
-}
-
-void wait_for_enter()
-{
-    std::cout << "Press Enter to continue...";
-
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
 void test_transformer()
 {
 	for (int page_index = 0; page_index < G_PAGES_IMAGES.size(); page_index++)
@@ -83,7 +66,7 @@ void test_transformer()
 		auto& images = G_PAGES_IMAGES[page_index];
 		auto& transformers = G_PAGES_TRANSFORMERS[page_index];
 		
-		clear_screen();
+		util::screen::clear();
 
 		std::cout << "page_index: " << page_index << std::endl;
 		if(images.size() >= 2)
@@ -98,7 +81,7 @@ void test_transformer()
 		
 		std::cout << pt.get_latin_text() << std::endl;
 
-		wait_for_enter();
+		util::screen::wait_for_enter();
 	}
 }
 

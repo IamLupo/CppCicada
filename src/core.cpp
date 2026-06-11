@@ -1,7 +1,7 @@
 #include <map>
 
 #include <core.h>
-#include <utf8.h>
+#include <util/utf8.h>
 
 namespace core
 {
@@ -68,7 +68,7 @@ std::optional<std::vector<uint8_t>> to_rune_indices(const std::string& runes)
 	for (size_t i = 0; i < runes.size();)
 	{
 		// Calculate length of utf8 bytes
-		size_t len = utf8_char_length(static_cast<unsigned char>(runes[i]));
+		size_t len = util::utf8_char_length(static_cast<unsigned char>(runes[i]));
 
 		// Read the utf8 character
 		std::string_view rune = runes.substr(i, len);

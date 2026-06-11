@@ -2,7 +2,10 @@
 
 #include <core/ProcessedText.h>
 
-void AtbashTransformer::transform(ProcessedText& pt)
+namespace transformer
+{
+
+void Atbash::transform(ProcessedText& pt)
 {
 	auto& indices = pt.rune_indices();
 
@@ -11,3 +14,5 @@ void AtbashTransformer::transform(ProcessedText& pt)
 		i = 28 - i; // example mutation
 	}
 }
+
+} // namespace transformer

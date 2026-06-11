@@ -5,13 +5,16 @@
 #include <math/totient.h>
 #include <transformer/Totient.h>
 
-TotientTransformer::TotientTransformer(const std::vector<size_t>& interrupt_indices)
+namespace transformer
+{
+
+Totient::Totient(const std::vector<size_t>& interrupt_indices)
 		: _interrupt_indices(interrupt_indices)
 {
 	
 }
 
-void TotientTransformer::transform(ProcessedText& pt)
+void Totient::transform(ProcessedText& pt)
 {
 	auto& rune_indices = pt.rune_indices();
 	int interups = 0;
@@ -30,3 +33,5 @@ void TotientTransformer::transform(ProcessedText& pt)
 		}
 	}
 }
+
+} // namespace transformer
