@@ -260,7 +260,7 @@ void check_sequence(const std::vector<uint8_t>& sequence, const std::vector<size
 {
 	// Make transformer
 	std::unique_ptr<Transformer> tf = std::make_unique<transformer::Sequence>(sequence, interrupt_indices);
-	std::unique_ptr<Transformer> tf2 = std::make_unique<transformer::Shift>(21, interrupt_indices);
+	std::unique_ptr<Transformer> tf2 = std::make_unique<transformer::Shift>(22, interrupt_indices);
 
 	// Create text processor
 	ProcessedText pt(page_index);
@@ -297,7 +297,7 @@ void check_sequence(const std::vector<uint8_t>& sequence, const std::vector<size
 		std::cout << std::endl;
 		
 		// Herpy derpy derpppppp =D
-		util::screen::wait_for_enter();
+		//util::screen::wait_for_enter();
 
 		std::cout << "-----------------------------" << std::endl;
 	}

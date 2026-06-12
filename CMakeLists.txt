@@ -34,6 +34,7 @@ add_executable(cicada
 include_directories(cicada src)
 
 target_link_options(cicada PRIVATE -static-libgcc -static-libstdc++)
+target_compile_options(cicada PRIVATE -fno-exceptions -fno-rtti -flto -finline-functions -Wl,--gc-sections)
 
 ## Version
 execute_process(
