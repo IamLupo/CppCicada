@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16.3)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 #set(CMAKE_CXX_COMPILER "ccache g++")
 
@@ -13,7 +13,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -s -O2")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s -O2")
 
-## BF2MC-Matchmaker
+## Cicada project
 project(cicada VERSION 1.0.0)
 
 ## Executable
@@ -24,12 +24,16 @@ add_executable(cicada
 	src/transformer/Vigenere.cpp
 	src/transformer/Shift.cpp
 	src/transformer/Totient.cpp
+	src/transformer/Sequence.cpp
+    src/util/oeis.cpp
     src/util/screen.cpp
 	src/pages.cpp
     src/main.cpp
 )
 
 include_directories(cicada src)
+
+target_link_options(cicada PRIVATE -static-libgcc -static-libstdc++)
 
 ## Version
 execute_process(

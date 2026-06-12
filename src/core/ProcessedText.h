@@ -31,7 +31,7 @@ class ProcessedText
 			return _rune_indices;
 		}
 
-		std::string get_latin_text();
+		std::string get_latin_text(size_t target = -1);
 };
 
 #endif // PROCESSED_TEXT_H

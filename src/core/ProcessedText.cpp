@@ -27,7 +27,7 @@ ProcessedText::~ProcessedText()
 
 }
 
-std::string ProcessedText::get_latin_text()
+std::string ProcessedText::get_latin_text(size_t target)
 {
 	if(this->_unsolved)
 		return "<unsolved>";
@@ -39,7 +39,7 @@ std::string ProcessedText::get_latin_text()
 	for (size_t i = 0; i < this->_content.size();)
 	{
 		// Calculate length of utf8 bytes
-		size_t len = util::utf8_char_length(static_cast<unsigned char>(this->_content[i]));
+		size_t len = util::utf8::char_length(static_cast<unsigned char>(this->_content[i]));
 
 		// Read the utf8 character
 		std::string_view c = this->_content.substr(i, len);
@@ -55,6 +55,11 @@ std::string ProcessedText::get_latin_text()
 
 			// Next rune position
 			rune_pos++;
+
+			if(target != -1 && rune_pos > target)
+			{
+				return s;
+			}
 		}
 		else
 			// Convert any special character

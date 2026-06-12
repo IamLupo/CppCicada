@@ -24,7 +24,7 @@ void initialize()
 
 		for (size_t i = 0; i < text.size();)
 		{
-			size_t len = util::utf8_char_length(static_cast<unsigned char>(text[i]));
+			size_t len = util::utf8::char_length(static_cast<unsigned char>(text[i]));
 
 			std::string_view rune = text.substr(i, len);
 			std::string_view latin = core::to_latin(rune).value_or("?");
