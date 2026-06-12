@@ -28,6 +28,8 @@ add_executable(cicada
     src/util/oeis.cpp
     src/util/screen.cpp
 	src/pages.cpp
+	src/actions/example.cpp
+    src/actions/sequence_bruteforce.cpp
     src/main.cpp
 )
 
