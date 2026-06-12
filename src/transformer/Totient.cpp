@@ -23,7 +23,7 @@ void Totient::transform(ProcessedText& pt)
 	{
 		if(std::find(this->_interrupt_indices.begin(), this->_interrupt_indices.end(), i) == _interrupt_indices.end())
 		{
-			uint8_t key = math::primes_totient_1000[(i - interups) % math::total_primes_totient] % 29;
+			uint8_t key = math::prime_totients_1000[(i - interups) % math::total_prime_totients] % 29;
 			
 			rune_indices[i] = (29 + rune_indices[i] - key) % 29;
 		}

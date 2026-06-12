@@ -38,8 +38,8 @@ namespace math
 	}
 
 	// 1000 -> 168 primes
-	inline constexpr size_t total_primes_totient = 168;
-	inline constexpr auto primes_totient_1000 = make_prime_totients<1000, total_primes_totient>();
+	inline constexpr size_t total_prime_totients = 168;
+	inline constexpr auto prime_totients_1000 = make_prime_totients<1000, total_prime_totients>();
 }
 
 #endif // PRIME_TOTIENT_H

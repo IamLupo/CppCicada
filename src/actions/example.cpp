@@ -112,7 +112,7 @@ void test_math()
 	std::cout << "\n";
 
 	std::cout << "primes_totient: ";
-	for (const auto p : math::primes_totient_1000)
+	for (const auto p : math::prime_totients_1000)
 	{
 		std::cout << p << ", ";
 	}
@@ -167,7 +167,7 @@ void test_sequence()
 {
 	// Convert sequence to uint8_t
 	std::vector<uint8_t> sequence;
-	for (const auto p : math::primes_totient_1000)
+	for (const auto p : math::prime_totients_1000)
 	{
 		sequence.push_back(static_cast<uint8_t>(p % 29));
 	}
