@@ -87,8 +87,55 @@ void make_map(const std::string& file_path, UInt8Map& map)
 		{
 			out.push_back(mod29_from_string(value));
 		}
-
+		
+		// Save results
 		map[key] = std::move(out);
+	}
+}
+
+void make_vector(const std::string& file_path, UInt8Vector& vector)
+{
+	std::ifstream fs(file_path);
+
+	if (!fs.is_open())
+		return;
+
+	std::string line;
+
+	while (std::getline(fs, line))
+	{
+		if (line.empty())
+			continue;
+
+		// split at first comma
+		size_t pos = line.find(',');
+
+		if (pos == std::string::npos)
+			continue;
+
+		//std::string key = trim(line.substr(0, pos));
+		std::string rest = line.substr(pos + 1);
+
+		StrSeq values;
+		std::stringstream ss(rest);
+		std::string item;
+
+		while (std::getline(ss, item, ','))
+		{
+			item = trim(item);
+
+			if (!item.empty())
+				values.push_back(item);
+		}
+		
+		UInt8Seq out;
+		for(const auto& value : values)
+		{
+			out.push_back(mod29_from_string(value));
+		}
+
+		// Save results
+		vector.push_back(out);
 	}
 }
 

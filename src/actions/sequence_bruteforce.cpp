@@ -62,15 +62,15 @@ int found_words(const std::string& text)
 void check_sequence(const std::vector<uint8_t>& sequence, const std::vector<size_t>& interrupt_indices, size_t page_index)
 {
 	// Make transformer
-	std::unique_ptr<Transformer> tf = std::make_unique<transformer::Sequence>(sequence, interrupt_indices);
-	std::unique_ptr<Transformer> tf2 = std::make_unique<transformer::Shift>(28, interrupt_indices);
+	transformer::Sequence tf = transformer::Sequence(sequence, interrupt_indices);
+	transformer::Shift tf2 = transformer::Shift(28, interrupt_indices);
 
 	// Create text processor
 	ProcessedText pt(page_index);
 
 	// Transform the cipher text
-	tf->transform(pt);
-	tf2->transform(pt);
+	tf.transform(pt);
+	tf2.transform(pt);
 	
 	// Show result
 	std::string decrypted_text = pt.get_latin_text(150);
@@ -150,18 +150,9 @@ void check_sequence(const std::vector<uint8_t>& sequence)
 	}
 }
 
-void check_all_sequences(const util::oeis::UInt8Map& uint8_map)
+void check_all_sequences(const util::oeis::UInt8Vector& work)
 {
     constexpr size_t THREAD_COUNT = 10;
-
-    // Create a flat list of pointers/references to the sequences.
-    std::vector<const util::oeis::UInt8Seq*> work;
-    work.reserve(uint8_map.size());
-
-    for (const auto& [sequence_id, sequence] : uint8_map)
-    {
-        work.push_back(&sequence);
-    }
 
     const size_t total = work.size();
     const size_t chunk_size = (total + THREAD_COUNT - 1) / THREAD_COUNT;
@@ -191,7 +182,7 @@ void check_all_sequences(const util::oeis::UInt8Map& uint8_map)
 					std::cout << "Thread " << thread_index << " worked done " << start << "/" << target << std::endl;  
 				}
 
-                check_sequence(*work[i]);
+                check_sequence(work[i]);
             }
         });
     }
@@ -204,9 +195,10 @@ void check_all_sequences(const util::oeis::UInt8Map& uint8_map)
 
 void sequence_bruteforce()
 {
+	/*
 	util::oeis::UInt8Map uint8_map;
 	
-	// Read oeis.txt file and convert to map
+	// Read oeis.txt file and convert to map of sequences
 	util::oeis::make_map("../data/oeis.txt", uint8_map);
 
 	std::cout << "uint8_map: " << uint8_map.size() << std::endl;
@@ -216,7 +208,7 @@ void sequence_bruteforce()
 	// Basic example
 	//check_sequence(uint8_map["A006093"], {}, 16);
 
-	/*
+	
 	// Iterate all sequences
 	for (const auto& [sequence_id, sequence] : uint8_map)
 	{
@@ -229,6 +221,11 @@ void sequence_bruteforce()
 	}
 	*/
 
-	check_all_sequences(uint8_map);
+	util::oeis::UInt8Vector work;
+
+	// Read oeis.txt file and convert to vector of sequences
+	util::oeis::make_vector("../data/oeis.txt", work);
+
+	check_all_sequences(work);
 }
 

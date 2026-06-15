@@ -14,12 +14,14 @@ namespace util::oeis
 	typedef std::vector<uint8_t> UInt8Seq;
 
 	typedef std::map<std::string, UInt8Seq> UInt8Map;
+	typedef std::vector<UInt8Seq> UInt8Vector;
 
 	// The largest sequence in oeis is 348 values.
 	const size_t max_sequence = 348;
 
 	// Functions
 	void make_map(const std::string& file_path, UInt8Map& map);
+	void make_vector(const std::string& file_path, UInt8Vector& vector);
 
 } // namespace util::oeis
 
