@@ -8,7 +8,7 @@
 namespace transformer
 {
 
-Totient::Totient(const std::vector<size_t>& interrupt_indices)
+Totient::Totient(const core::RuneInterruptIndices& interrupt_indices)
 		: _interrupt_indices(interrupt_indices)
 {
 	

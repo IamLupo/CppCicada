@@ -18,10 +18,7 @@ class Transformer
 class UnsolvedTransformer : public Transformer
 {
 	public:
-		void transform(ProcessedText& pt) override
-		{
-			pt.SetUnsolved();
-		};
+		void transform(ProcessedText& pt) override;
 };
 
 #endif // TRANSFORMER_H

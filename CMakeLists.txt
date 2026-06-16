@@ -20,6 +20,7 @@ project(cicada VERSION 1.0.0)
 add_executable(cicada
 	src/core.cpp
 	src/core/ProcessedText.cpp
+	src/transformer/Transformer.cpp
 	src/transformer/Atbash.cpp
 	src/transformer/Vigenere.cpp
 	src/transformer/Shift.cpp

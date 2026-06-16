@@ -6,7 +6,7 @@
 namespace transformer
 {
 
-Shift::Shift(uint8_t shift, const std::vector<size_t>& interrupt_indices)
+Shift::Shift(uint8_t shift, const core::RuneInterruptIndices& interrupt_indices)
 		: _shift(shift), _interrupt_indices(interrupt_indices)
 {
 	

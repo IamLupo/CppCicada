@@ -2,19 +2,18 @@
 #define CORE_H
 
 #include <array>
-#include <string_view>
-#include <cstdint>
 #include <unordered_map>
 #include <optional>
-#include <vector>
 #include <string>
  
+#include <core/types.h>
+
 namespace core
 {
 	struct RuneEntry
 	{
-		std::string_view rune;
-		std::string_view latin;
+		core::Rune rune;
+		core::RuneLatin latin;
 		uint8_t prime;
 	};
 
@@ -67,10 +66,10 @@ namespace core
 		{"ᛠ", "EA", 109}
 	}};
 
-	inline std::unordered_map<std::string_view, size_t> rune_to_index;
-	inline std::unordered_map<std::string_view, size_t> latin_to_index;
+	inline std::unordered_map<core::Rune, size_t> rune_to_index;
+	inline std::unordered_map<core::RuneLatin, size_t> latin_to_index;
 
-	inline const std::vector<std::pair<std::string, std::string>> latin_to_runes = {
+	inline const std::vector<std::pair<core::RuneLatin, core::Rune>> latin_to_runes = {
 		// Latin values that are the same rune
 		{ "ING", "NG"  },	// BEING       -> BENG
 		{ "ION", "IAN" },	// INSTRUCTION -> INSTRVCTIAN
@@ -117,27 +116,27 @@ namespace core
 	// Functions
 	void initialize();
 
-	std::optional<std::string_view> to_latin(std::string_view rune);
-	std::optional<std::string_view> to_rune(std::string_view latin);
-	std::optional<uint8_t> to_prime(std::string_view rune);
+	std::optional<core::RuneLatin> to_latin(core::Rune rune);
+	std::optional<core::Rune> to_rune(core::RuneLatin latin);
+	std::optional<core::RunePrime> to_prime(core::Rune rune);
 
-	std::optional<std::vector<uint8_t>> to_rune_indices(const std::string& runes);
+	std::optional<RuneIndices> to_rune_indices(const std::string& runes);
 	std::optional<std::string> to_runes(std::string_view text);
 	std::string to_latins(const std::string runes);
 
 	namespace unsafe
 	{
-		inline std::string_view to_latin(std::string_view rune)
+		inline core::RuneLatin to_latin(core::Rune rune)
 		{
 			return core::runes[rune_to_index[rune]].latin;
 		}
 
-		inline std::string_view to_rune(std::string_view latin)
+		inline core::Rune to_rune(core::RuneLatin latin)
 		{
 			return core::runes[latin_to_index[latin]].rune;
 		}
 
-		inline uint8_t to_prime(std::string_view rune)
+		inline core::RunePrime to_prime(core::Rune rune)
 		{
 			return core::runes[rune_to_index[rune]].prime;
 		}

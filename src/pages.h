@@ -2,21 +2,17 @@
 #define PAGES_H
 
 #include <array>
-#include <vector>
-#include <string_view>
 #include <unordered_map>
-#include <cstdint>
-#include <memory>
 
-class Transformer;
+#include <core/types.h>
 
 namespace pages
 {
-	inline std::unordered_map<size_t, std::vector<size_t> > interupters;
-	inline std::unordered_map<size_t, std::vector<uint8_t> > rune_indices;
-	inline std::unordered_map<size_t, std::vector<std::unique_ptr<Transformer>> > transformers;
+	inline std::unordered_map<core::PageIndex, core::RuneInterruptIndices> interrupters;
+	inline std::unordered_map<core::PageIndex, core::RuneIndices> rune_indices;
+	inline std::unordered_map<core::PageIndex, core::Transformers_ptr> transformers;
 
-	inline std::vector<std::vector<std::string_view>> images = {
+	inline core::PageImageGroups images = {
 		{"01.jpg"},                                                                         // Solved: AtBash
 		{"03.jpg", "04.jpg"},                                                               // Solved: Vigenere
 		{"05.jpg"},                                                                         // Solved: Gematria Primus
@@ -38,7 +34,7 @@ namespace pages
 		{"74.jpg"},                                                                         // Solved: Gematria Primes
 	};
 
-	inline constexpr std::array<const std::string_view, 18> content = {
+	inline constexpr std::array<core::PageContent, 18> content = {
 // Apply what we learned in Gematria Primes subsitution table (aka atbash)
 //
 // images: 01.jpg
@@ -53,7 +49,7 @@ R"(ᚱ-ᛝᚱᚪᛗᚹ.ᛄᛁᚻᛖᛁᛡᛁ-ᛗᚫᚣᚹ-ᛠᚪᚫᚾ-/
 ᛈ-ᛈᚱᛞᚪᛁᚳ./)",
 
 // Learn: We bruteforce Vigenere keys and we get potential candidate key: "DIVINITY" that we found on page 10.jpg
-// Learn: F is an interupter!
+// Learn: F is an interrupter!
 //
 // images: 03.jpg till 04.jpg
 R"(ᚢᛠᛝᛋᛇᚠᚳ.ᚱᛇᚢᚷᛈᛠᛠ-ᚠᚹᛉ/
@@ -992,6 +988,8 @@ R"(ᛈᚪᚱᚪᛒᛚᛖ.ᛚᛁᚳᛖ-ᚦᛖ-ᛁᚾᛋᛏᚪᚱ-ᛏ/
 
 	// Functions
 	void initialize();
+
+	core::RuneInterruptIndices get_max_interrupt_indices(core::PageIndex page_index, size_t max);
 
 } // namespace pages
 

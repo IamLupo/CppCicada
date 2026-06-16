@@ -10,7 +10,7 @@
 
 void show_solved_pages()
 {
-	for (size_t page_index = 0; page_index < pages::images.size(); page_index++)
+	for (core::PageIndex page_index = 0; page_index < pages::images.size(); page_index++)
 	{
 		const auto& images = pages::images[page_index];
 		const auto& transformers = pages::transformers[page_index];
@@ -25,7 +25,7 @@ void show_solved_pages()
 
 		ProcessedText pt(page_index);
 
-		for (const std::unique_ptr<Transformer>& tf : transformers)
+		for (const core::Transformer_ptr& tf : transformers)
 			tf->transform(pt);
 		
 		std::cout << pt.get_latin_text() << std::endl;

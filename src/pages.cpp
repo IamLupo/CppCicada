@@ -13,37 +13,37 @@ namespace pages
 void initialize()
 {
 	// Initialize pages
-	for (size_t page_index = 0; page_index < pages::content.size(); ++page_index)
+	for (core::PageIndex page_index = 0; page_index < pages::content.size(); ++page_index)
 	{
-		std::vector<size_t> interupters;
-		std::vector<uint8_t> rune_indices;
+		core::RuneInterruptIndices interrupters;
+		core::RuneIndices rune_indices;
 
-		size_t rune_index = 0;
+		core::RunePosition rune_position = 0;
 		
-		std::string_view text = pages::content[page_index];
+		core::PageContent content = pages::content[page_index];
 
-		for (size_t i = 0; i < text.size();)
+		for (size_t i = 0; i < content.size();)
 		{
-			size_t len = util::utf8::char_length(static_cast<unsigned char>(text[i]));
+			size_t len = util::utf8::char_length(static_cast<unsigned char>(content[i]));
 
-			std::string_view rune = text.substr(i, len);
-			std::string_view latin = core::to_latin(rune).value_or("?");
+			core::Rune rune = content.substr(i, len);
+			core::RuneLatin latin = core::to_latin(rune).value_or("?");
 			
 			if(latin != "?")
 			{
 				rune_indices.push_back(core::rune_to_index[rune]);
 				
 				if(rune == "ᚠ")
-					interupters.push_back(rune_index);
+					interrupters.push_back(rune_position);
 
-				rune_index++;
+				rune_position++;
 			}
 
 			i += len;
 		}
 		
 		// Save results
-		pages::interupters[page_index] = interupters;
+		pages::interrupters[page_index] = interrupters;
 		pages::rune_indices[page_index] = rune_indices;
 		pages::transformers[page_index].clear();
 	}
@@ -53,19 +53,19 @@ void initialize()
 	pages::transformers[1].push_back(
 		std::make_unique<transformer::Vigenere>(
 			"DIVINITY", // DIVINITY = ᛞᛁᚢᛁᚾᛁᛏᚣ
-			std::vector<size_t>{ 48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514 }
+			core::RuneInterruptIndices{ 48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514 }
 	));
 
 	pages::transformers[3].push_back(std::make_unique<transformer::Atbash>());
 	pages::transformers[3].push_back(std::make_unique<transformer::Shift>(
-			3, std::vector<size_t>({})
+			3, core::RuneInterruptIndices({})
 	));
 
 	pages::transformers[5].push_back(
 		std::make_unique<transformer::Vigenere>(
 			// "CIRCVMFERENCE", // CIRCVMFERENCE = ᚳᛁᚱᚳᚢᛗᚠᛖᚱᛖᚾᚳᛖ
 			"FIRFVMFERENFE", // FIRFVMFERENFE = ᚠᛁᚱᚠᚢᛗᚠᛖᚱᛖᚾᚠᛖ
-			std::vector<size_t>{ 49, 58 }
+			core::RuneInterruptIndices{ 49, 58 }
 	));
 	
 	pages::transformers[7].push_back(std::make_unique<UnsolvedTransformer>());
@@ -80,8 +80,25 @@ void initialize()
 
 	pages::transformers[16].push_back(
 		std::make_unique<transformer::Totient>(
-			std::vector<size_t>{ 56 }
+			core::RuneInterruptIndices{ 56 }
 	));
+}
+
+core::RuneInterruptIndices get_max_interrupt_indices(core::PageIndex page_index, size_t max)
+{
+	core::RuneInterruptIndices interrupt_indices;
+
+	const auto& interrupters = pages::interrupters[page_index];
+
+	for(auto v : interrupters)
+	{
+		if(v >= max)
+			break;
+		
+		interrupt_indices.push_back(v);
+	}
+
+	return interrupt_indices;
 }
 
 } // namespace pages

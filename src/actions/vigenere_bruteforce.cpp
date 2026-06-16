@@ -86,7 +86,7 @@ static int found_words(const std::string& text)
 	return found;
 }
 
-void check_vigenere(const std::string& key, const std::vector<size_t>& interrupt_indices, size_t page_index)
+void check_vigenere(const std::string& key, const core::RuneInterruptIndices& interrupt_indices, core::PageIndex page_index)
 {
 	// Make transformer
 	transformer::Vigenere tf = transformer::Vigenere(key, interrupt_indices);
@@ -128,35 +128,18 @@ void check_vigenere(const std::string& key, const std::vector<size_t>& interrupt
 	}
 }
 
-static std::vector<size_t> get_interrupt_indices(size_t page_index)
-{
-	std::vector<size_t> interrupt_indices;
-
-	const auto& interupters = pages::interupters[page_index];
-
-	for(auto v : interupters)
-	{
-		if(v >= 100)
-			break;
-		
-		interrupt_indices.push_back(v);
-	}
-
-	return interrupt_indices;
-}
-
 void check_vigenere(const std::string& key)
 {
-	//for (size_t page_index = 1; page_index < 2; ++page_index)
-	//for (size_t page_index = 5; page_index < 6; ++page_index)
-	for (size_t page_index = 7; page_index < 16; ++page_index)
+	//for (core::PageIndex page_index = 1; page_index < 2; ++page_index)
+	for (core::PageIndex page_index = 5; page_index < 6; ++page_index)
+	//for (core::PageIndex page_index = 7; page_index < 16; ++page_index)
 	{
-		auto all_interrupt_indices = get_interrupt_indices(page_index);
+		auto all_interrupt_indices = pages::get_max_interrupt_indices(page_index, 100);
 		const size_t n = all_interrupt_indices.size();
 
 		for (uint32_t mask = 0; mask < (1u << n); ++mask)
 		{
-			std::vector<size_t> interrupt_indices;
+			core::RuneInterruptIndices interrupt_indices;
 
 			interrupt_indices.reserve(n);
 
@@ -178,7 +161,7 @@ std::string patch_key(const std::string& key)
 {
 	std::string new_key = "";
 	std::string runes = core::to_runes(key).value_or("");
-	std::vector<uint8_t> rune_indices = core::to_rune_indices(runes).value_or(std::vector<uint8_t>({}));
+	core::RuneIndices rune_indices = core::to_rune_indices(runes).value_or(core::RuneIndices());
 
 	if(rune_indices.size() > 0)
 	{
