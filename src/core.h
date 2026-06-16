@@ -123,6 +123,7 @@ namespace core
 
 	std::optional<std::vector<uint8_t>> to_rune_indices(const std::string& runes);
 	std::optional<std::string> to_runes(std::string_view text);
+	std::string to_latins(const std::string runes);
 
 	namespace unsafe
 	{

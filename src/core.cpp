@@ -14,6 +14,27 @@ void initialize()
 	}
 }
 
+std::string to_latins(const std::string runes)
+{
+	std::string latins;
+
+	// Iterate through all content
+	for (size_t i = 0; i < runes.size();)
+	{
+		// Calculate length of utf8 bytes
+		size_t len = util::utf8::char_length(static_cast<unsigned char>(runes[i]));
+
+		// Read the utf8 character
+		std::string_view rune = runes.substr(i, len);
+
+		latins += core::to_latin(rune).value_or("?");
+		
+		i += len;
+	}
+
+	return latins;
+}
+
 std::optional<std::string_view> to_latin(std::string_view rune)
 {
 	auto it = rune_to_index.find(rune);

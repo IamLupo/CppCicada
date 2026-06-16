@@ -30,6 +30,7 @@ add_executable(cicada
 	src/pages.cpp
 	src/actions/example.cpp
     src/actions/sequence_bruteforce.cpp
+    src/actions/vigenere_bruteforce.cpp
     src/main.cpp
 )
 

@@ -25,4 +25,14 @@ void test_sequence();
 */
 void sequence_bruteforce();
 
+/*
+	Vigenere Bruteforce
+
+	Uses oeis sequences and decrypt it with transformer::Vigenere.
+	It has multithread support that split appart the work in chunks.
+	Second it has interupter indices generater that takes all interrupters for each page and iterate all combinations that can exist.
+	This way we can decrypt with high confidence words more perfect.
+*/
+void vigenere_bruteforce();
+
 #endif // ACTIONS_H

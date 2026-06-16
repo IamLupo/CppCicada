@@ -1,19 +1,46 @@
 #include <iostream>
-#include <memory>
+#include <fstream>
+#include <vector>
+#include <string>
 #include <thread>
 #include <mutex>
+#include <transformer/Transformer.h>
+#include <transformer/Vigenere.h>
 
-#include <version.h>
 #include <core.h>
 #include <pages.h>
-#include <actions.h>
-#include <util/oeis.h>
+#include <util/string.h>
 #include <util/screen.h>
-#include <core/ProcessedText.h>
-#include <transformer/Sequence.h>
-#include <transformer/Shift.h>
 
-static std::mutex  mutex_result;
+std::mutex  mutex_result;
+
+static void read_words(const std::string& file_path, std::vector<std::string>& list)
+{
+	std::ifstream fs(file_path);
+
+	if (!fs.is_open())
+		return;
+
+	std::string line;
+
+	while (std::getline(fs, line))
+	{
+		if(line.empty())
+			continue;
+		
+		if(!util::string::contains_special_chars(line))
+		{
+			std::string word = util::string::to_upper(line);
+			
+			std::string runes = core::to_runes(word).value_or("");
+			std::string latin = core::to_latins(runes);
+			
+			//std::cout << word << " -> " << runes << " -> " << latin << std::endl;
+
+			list.push_back(word);
+		}
+	}
+}
 
 static constexpr std::array words =
 {
@@ -59,18 +86,16 @@ static int found_words(const std::string& text)
 	return found;
 }
 
-void check_sequence(const std::vector<uint8_t>& sequence, const std::vector<size_t>& interrupt_indices, size_t page_index)
+void check_vigenere(const std::string& key, const std::vector<size_t>& interrupt_indices, size_t page_index)
 {
 	// Make transformer
-	transformer::Sequence tf = transformer::Sequence(sequence, interrupt_indices);
-	transformer::Shift tf2 = transformer::Shift(28, interrupt_indices);
+	transformer::Vigenere tf = transformer::Vigenere(key, interrupt_indices);
 
 	// Create text processor
 	ProcessedText pt(page_index);
 
 	// Transform the cipher text
 	tf.transform(pt);
-	tf2.transform(pt);
 	
 	// Show result
 	std::string decrypted_text = pt.get_latin_text(150);
@@ -79,8 +104,8 @@ void check_sequence(const std::vector<uint8_t>& sequence, const std::vector<size
 	{
 		std::lock_guard<std::mutex> guard(mutex_result);
 		
-		std::cout << "decrypted_text: " << util::screen::highlight_words(decrypted_text, words) << std::endl;
-
+		std::cout << "decrypted_text: " << util::screen::highlight_words(decrypted_text, words, false) << std::endl;
+		
 		std::cout << "page_index: " << page_index << std::endl;
 
 		std::cout << "found words: ";
@@ -89,10 +114,7 @@ void check_sequence(const std::vector<uint8_t>& sequence, const std::vector<size
 				std::cout << word << ", ";
 		std::cout << std::endl;
 		
-		std::cout << "sequence: ";
-		for(const auto v : sequence)
-			std::cout << +v << ", ";
-		std::cout << std::endl;
+		std::cout << "key: " << key << std::endl;
 		
 		std::cout << "interrupt_indices: ";
 		for(const auto v : interrupt_indices)
@@ -123,8 +145,10 @@ static std::vector<size_t> get_interrupt_indices(size_t page_index)
 	return interrupt_indices;
 }
 
-void check_sequence(const std::vector<uint8_t>& sequence)
+void check_vigenere(const std::string& key)
 {
+	//for (size_t page_index = 1; page_index < 2; ++page_index)
+	//for (size_t page_index = 5; page_index < 6; ++page_index)
 	for (size_t page_index = 7; page_index < 16; ++page_index)
 	{
 		auto all_interrupt_indices = get_interrupt_indices(page_index);
@@ -145,12 +169,34 @@ void check_sequence(const std::vector<uint8_t>& sequence)
 			}
 
 			// Process this subset immediately.
-			check_sequence(sequence, interrupt_indices, page_index);
+			check_vigenere(key, interrupt_indices, page_index);
 		}
 	}
 }
 
-void check_all_sequences(const util::oeis::UInt8Vector& work)
+std::string patch_key(const std::string& key)
+{
+	std::string new_key = "";
+	std::string runes = core::to_runes(key).value_or("");
+	std::vector<uint8_t> rune_indices = core::to_rune_indices(runes).value_or(std::vector<uint8_t>({}));
+
+	if(rune_indices.size() > 0)
+	{
+		uint8_t first_rune_index = rune_indices[0];
+		
+		for(int i = 0; i < rune_indices.size(); i++)
+		{
+			if(rune_indices[i] == first_rune_index)
+				new_key += core::runes[0].latin;
+			else
+				new_key += core::runes[rune_indices[i]].latin;
+		}
+	}
+
+	return new_key;
+}
+
+void check_all_vigenere(const std::vector<std::string>& work)
 {
     constexpr size_t THREAD_COUNT = 10;
 
@@ -176,13 +222,15 @@ void check_all_sequences(const util::oeis::UInt8Vector& work)
 				int start = i - begin;
 				int target = end - begin;
 
-				if(start % 5000 == 0)
+				if(start % 500 == 0)
 				{
 					std::lock_guard<std::mutex> guard(mutex_result);
 					std::cout << "Thread " << thread_index << " worked done " << start << "/" << target << std::endl;  
 				}
 
-                check_sequence(work[i]);
+                check_vigenere(work[i]);
+
+				//check_vigenere(patch_key(work[i]));
             }
         });
     }
@@ -193,39 +241,11 @@ void check_all_sequences(const util::oeis::UInt8Vector& work)
     }
 }
 
-void sequence_bruteforce()
+void vigenere_bruteforce()
 {
-	/*
-	util::oeis::UInt8Map uint8_map;
-	
-	// Read oeis.txt file and convert to map of sequences
-	util::oeis::make_map("../data/oeis.txt", uint8_map);
+	std::vector<std::string> list;
 
-	std::cout << "uint8_map: " << uint8_map.size() << std::endl;
+	read_words("../data/english_wordlist.txt", list);
 
-	//util::screen::wait_for_enter();
-
-	// Basic example
-	//check_sequence(uint8_map["A006093"], {}, 16);
-
-	
-	// Iterate all sequences
-	for (const auto& [sequence_id, sequence] : uint8_map)
-	{
-		std::cout << sequence_id << " - " << sequence.size() << std::endl;
-		
-		// Force to send the results to the screen. Else it will have 1 GB of output data in memory xD
-		//std::cout << std::flush;
-
-		check_sequence(sequence);
-	}
-	*/
-
-	util::oeis::UInt8Vector work;
-
-	// Read oeis.txt file and convert to vector of sequences
-	util::oeis::make_vector("../data/oeis.txt", work);
-
-	check_all_sequences(work);
+	check_all_vigenere(list);
 }
-

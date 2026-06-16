@@ -41,6 +41,6 @@ int main()
 	pages::initialize();
 
 	//show_solved_pages();
-
-	sequence_bruteforce();
+	//sequence_bruteforce();
+	vigenere_bruteforce();
 }
