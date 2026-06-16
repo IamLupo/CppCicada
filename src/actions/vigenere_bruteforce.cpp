@@ -4,6 +4,7 @@
 #include <string>
 #include <thread>
 #include <mutex>
+#include <core/ProcessedText.h>
 #include <transformer/Transformer.h>
 #include <transformer/Vigenere.h>
 
@@ -12,9 +13,9 @@
 #include <util/string.h>
 #include <util/screen.h>
 
-std::mutex  mutex_result;
+static std::mutex  mutex_result;
 
-static void read_words(const std::string& file_path, std::vector<std::string>& list)
+static void read_words(const std::string& file_path, core::RuneLatinList& list)
 {
 	std::ifstream fs(file_path);
 
@@ -32,10 +33,10 @@ static void read_words(const std::string& file_path, std::vector<std::string>& l
 		{
 			std::string word = util::string::to_upper(line);
 			
-			std::string runes = core::to_runes(word).value_or("");
-			std::string latin = core::to_latins(runes);
+			core::Runes runes = core::to_runes(word).value_or("");
+			core::RuneLatin latin = core::to_latins(runes);
 			
-			//std::cout << word << " -> " << runes << " -> " << latin << std::endl;
+			std::cout << word << " -> " << runes << " -> " << latin << std::endl;
 
 			list.push_back(word);
 		}
@@ -86,7 +87,7 @@ static int found_words(const std::string& text)
 	return found;
 }
 
-void check_vigenere(const std::string& key, const std::vector<size_t>& interrupt_indices, size_t page_index)
+void check_vigenere(const core::RuneLatin& key, const core::RuneInterruptIndices& interrupt_indices, size_t page_index)
 {
 	// Make transformer
 	transformer::Vigenere tf = transformer::Vigenere(key, interrupt_indices);
@@ -128,35 +129,18 @@ void check_vigenere(const std::string& key, const std::vector<size_t>& interrupt
 	}
 }
 
-static std::vector<size_t> get_interrupt_indices(size_t page_index)
+void check_vigenere(const core::RuneLatin& key)
 {
-	std::vector<size_t> interrupt_indices;
-
-	const auto& interupters = pages::interupters[page_index];
-
-	for(auto v : interupters)
+	//for (core::PageIndex page_index = 1; page_index < 2; ++page_index)
+	//for (core::PageIndex page_index = 5; page_index < 6; ++page_index)
+	for (core::PageIndex page_index = 7; page_index < 16; ++page_index)
 	{
-		if(v >= 100)
-			break;
-		
-		interrupt_indices.push_back(v);
-	}
-
-	return interrupt_indices;
-}
-
-void check_vigenere(const std::string& key)
-{
-	//for (size_t page_index = 1; page_index < 2; ++page_index)
-	//for (size_t page_index = 5; page_index < 6; ++page_index)
-	for (size_t page_index = 7; page_index < 16; ++page_index)
-	{
-		auto all_interrupt_indices = get_interrupt_indices(page_index);
+		auto all_interrupt_indices = pages::get_max_interrupt_indices(page_index, 100);
 		const size_t n = all_interrupt_indices.size();
 
 		for (uint32_t mask = 0; mask < (1u << n); ++mask)
 		{
-			std::vector<size_t> interrupt_indices;
+			core::RuneInterruptIndices interrupt_indices;
 
 			interrupt_indices.reserve(n);
 
@@ -174,15 +158,15 @@ void check_vigenere(const std::string& key)
 	}
 }
 
-std::string patch_key(const std::string& key)
+core::RuneLatin patch_key(const core::RuneLatin& key)
 {
-	std::string new_key = "";
-	std::string runes = core::to_runes(key).value_or("");
-	std::vector<uint8_t> rune_indices = core::to_rune_indices(runes).value_or(std::vector<uint8_t>({}));
+	std::string       new_key      = "";
+	core::Runes       runes        = core::to_runes(key).value_or("");
+	core::RuneIndices rune_indices = core::to_rune_indices(runes).value_or(core::RuneIndices({}));
 
 	if(rune_indices.size() > 0)
 	{
-		uint8_t first_rune_index = rune_indices[0];
+		core::RuneIndex first_rune_index = rune_indices[0];
 		
 		for(int i = 0; i < rune_indices.size(); i++)
 		{
@@ -196,7 +180,7 @@ std::string patch_key(const std::string& key)
 	return new_key;
 }
 
-void check_all_vigenere(const std::vector<std::string>& work)
+void check_all_vigenere(const core::RuneLatinList& work)
 {
     constexpr size_t THREAD_COUNT = 10;
 
@@ -230,7 +214,7 @@ void check_all_vigenere(const std::vector<std::string>& work)
 
                 check_vigenere(work[i]);
 
-				//check_vigenere(patch_key(work[i]));
+				check_vigenere(patch_key(work[i]));
             }
         });
     }
@@ -243,7 +227,7 @@ void check_all_vigenere(const std::vector<std::string>& work)
 
 void vigenere_bruteforce()
 {
-	std::vector<std::string> list;
+	core::RuneLatinList list;
 
 	read_words("../data/english_wordlist.txt", list);
 

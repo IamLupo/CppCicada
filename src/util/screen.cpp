@@ -23,8 +23,10 @@ void wait_for_enter()
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-std::string highlight_words(std::string text, std::span<const std::string_view> words, bool is_console)
+std::string highlight_words(const std::string& text, std::span<const std::string_view> words, bool is_console)
 {
+	std::string new_text = text;
+
 	for (const auto& w : words)
 	{
 		size_t pos = 0;
@@ -33,20 +35,20 @@ std::string highlight_words(std::string text, std::span<const std::string_view> 
 		{
 			if(is_console)
 			{
-				text.replace(pos, w.size(),
+				new_text.replace(pos, w.size(),
 					std::string(GREEN) + std::string(w) + std::string(RESET));
 				pos += sizeof(GREEN) + sizeof(RESET); // crude but works
 			}
 			else
 			{
-				text.replace(pos, w.size(),
+				new_text.replace(pos, w.size(),
 					"[" + std::string(w) + "]");
 				pos += 2;
 			}
 		}
 	}
 
-	return text;
+	return new_text;
 }
 
 }

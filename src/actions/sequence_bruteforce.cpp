@@ -59,7 +59,7 @@ static int found_words(const std::string& text)
 	return found;
 }
 
-void check_sequence(const std::vector<uint8_t>& sequence, const std::vector<size_t>& interrupt_indices, size_t page_index)
+void check_sequence(const std::vector<uint8_t>& sequence, const core::RuneInterruptIndices& interrupt_indices, size_t page_index)
 {
 	// Make transformer
 	transformer::Sequence tf = transformer::Sequence(sequence, interrupt_indices);
@@ -106,33 +106,16 @@ void check_sequence(const std::vector<uint8_t>& sequence, const std::vector<size
 	}
 }
 
-static std::vector<size_t> get_interrupt_indices(size_t page_index)
-{
-	std::vector<size_t> interrupt_indices;
-
-	const auto& interupters = pages::interupters[page_index];
-
-	for(auto v : interupters)
-	{
-		if(v >= 100)
-			break;
-		
-		interrupt_indices.push_back(v);
-	}
-
-	return interrupt_indices;
-}
-
 void check_sequence(const std::vector<uint8_t>& sequence)
 {
-	for (size_t page_index = 7; page_index < 16; ++page_index)
+	for (core::PageIndex page_index = 7; page_index < 16; ++page_index)
 	{
-		auto all_interrupt_indices = get_interrupt_indices(page_index);
+		auto all_interrupt_indices = pages::get_max_interrupt_indices(page_index, 100);
 		const size_t n = all_interrupt_indices.size();
 
 		for (uint32_t mask = 0; mask < (1u << n); ++mask)
 		{
-			std::vector<size_t> interrupt_indices;
+			core::RuneInterruptIndices interrupt_indices;
 
 			interrupt_indices.reserve(n);
 

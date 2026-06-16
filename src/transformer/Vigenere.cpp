@@ -7,12 +7,12 @@
 namespace transformer
 {
 
-Vigenere::Vigenere(const std::string_view& key, const std::vector<size_t>& interrupt_indices)
+Vigenere::Vigenere(const core::RuneLatin& key, const core::RuneInterruptIndices& interrupt_indices)
 		: _interrupt_indices(interrupt_indices)
 {
-	std::string runes = core::to_runes(key).value_or("");
+	core::Runes runes = core::to_runes(key).value_or("");
 
-	this->_key = core::to_rune_indices(runes).value_or(std::vector<uint8_t>({}));
+	this->_key = core::to_rune_indices(runes).value_or(core::RuneIndices({}));
 }
 
 void Vigenere::transform(ProcessedText& pt)

@@ -7,7 +7,7 @@
 namespace transformer
 {
 
-Sequence::Sequence(const std::vector<uint8_t>& sequence, const std::vector<size_t>& interrupt_indices)
+Sequence::Sequence(const std::vector<uint8_t>& sequence, const core::RuneInterruptIndices& interrupt_indices)
 		: _sequence(sequence), _interrupt_indices(interrupt_indices)
 {
 	

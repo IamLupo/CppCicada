@@ -1,6 +1,7 @@
 #ifndef TRANSFORMER_SHIFT_H
 #define TRANSFORMER_SHIFT_H
 
+#include <core/types.h>
 #include <transformer/Transformer.h>
 
 namespace transformer
@@ -8,11 +9,11 @@ namespace transformer
 	class Shift : public Transformer
 	{
 		private:
-			uint8_t             _shift;
-			std::vector<size_t> _interrupt_indices;
+			uint8_t                    _shift;
+			core::RuneInterruptIndices _interrupt_indices;
 		
 		public:
-			Shift(uint8_t shift, const std::vector<size_t>& interrupt_indices);
+			Shift(uint8_t shift, const core::RuneInterruptIndices& interrupt_indices);
 
 			void transform(ProcessedText& pt) override;
 	};

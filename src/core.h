@@ -2,20 +2,19 @@
 #define CORE_H
 
 #include <array>
-#include <string_view>
-#include <cstdint>
 #include <unordered_map>
 #include <optional>
-#include <vector>
 #include <string>
  
+#include <core/types.h>
+
 namespace core
 {
 	struct RuneEntry
 	{
-		std::string_view rune;
-		std::string_view latin;
-		uint8_t prime;
+		RuneView rune;
+		RuneLatinView latin;
+		RunePrime prime;
 	};
 
 	struct CharMap
@@ -67,10 +66,10 @@ namespace core
 		{"ᛠ", "EA", 109}
 	}};
 
-	inline std::unordered_map<std::string_view, size_t> rune_to_index;
-	inline std::unordered_map<std::string_view, size_t> latin_to_index;
+	inline std::unordered_map<RuneView, RuneIndex> rune_to_index;
+	inline std::unordered_map<RuneLatinView, RuneIndex> latin_to_index;
 
-	inline const std::vector<std::pair<std::string, std::string>> latin_to_runes = {
+	inline const std::vector<std::pair<RuneLatinView, RuneView>> latin_to_runes = {
 		// Latin values that are the same rune
 		{ "ING", "NG"  },	// BEING       -> BENG
 		{ "ION", "IAN" },	// INSTRUCTION -> INSTRVCTIAN
@@ -117,27 +116,32 @@ namespace core
 	// Functions
 	void initialize();
 
-	std::optional<std::string_view> to_latin(std::string_view rune);
-	std::optional<std::string_view> to_rune(std::string_view latin);
-	std::optional<uint8_t> to_prime(std::string_view rune);
+	std::optional<RuneLatinView> to_latin(const Rune& rune);
+	std::optional<RuneLatinView> to_latin(RuneView rune);
 
-	std::optional<std::vector<uint8_t>> to_rune_indices(const std::string& runes);
-	std::optional<std::string> to_runes(std::string_view text);
-	std::string to_latins(const std::string runes);
+	std::optional<RuneView> to_rune(const RuneLatin& latin);
+	std::optional<RuneView> to_rune(RuneLatinView latin);
+	
+	std::optional<RunePrime> to_prime(const Rune& rune);
+	std::optional<RunePrime> to_prime(RuneView rune);
+
+	std::optional<RuneIndices> to_rune_indices(const Runes& runes, bool ignore_no_runes = false);
+	std::optional<Runes> to_runes(const std::string& text);
+	std::string to_latins(const Runes& runes);
 
 	namespace unsafe
 	{
-		inline std::string_view to_latin(std::string_view rune)
+		inline core::RuneLatinView to_latin(const core::Rune& rune)
 		{
 			return core::runes[rune_to_index[rune]].latin;
 		}
 
-		inline std::string_view to_rune(std::string_view latin)
+		inline core::RuneView to_rune(const core::RuneLatin& latin)
 		{
 			return core::runes[latin_to_index[latin]].rune;
 		}
 
-		inline uint8_t to_prime(std::string_view rune)
+		inline core::RunePrime to_prime(const core::Rune& rune)
 		{
 			return core::runes[rune_to_index[rune]].prime;
 		}
@@ -157,6 +161,7 @@ namespace core
 			
 			return std::nullopt;
 		}
+	
 	} // namespace unsafe
 } // namespace core
 

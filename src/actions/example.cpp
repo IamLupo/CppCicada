@@ -19,17 +19,17 @@ void test_runes()
 	std::cout << core::runes[1].latin << std::endl;
 	std::cout << +core::runes[1].prime << std::endl;
 
-	std::cout << core::to_rune("V").value_or("?") << std::endl;
-	std::cout << core::to_rune("LOL").value_or("?") << std::endl;
+	std::cout << core::to_rune(std::string("V")).value_or("?") << std::endl;
+	std::cout << core::to_rune(std::string("LOL")).value_or("?") << std::endl;
 	std::cout << core::unsafe::to_rune("V") << std::endl;
 }
 
 void test_pages()
 {
-	for(size_t page_index = 0; page_index < pages::content.size(); ++page_index)
+	for(core::PageIndex page_index = 0; page_index < pages::content.size(); ++page_index)
 	{
 		const auto& images = pages::images[page_index];
-		const auto& interupters = pages::interupters[page_index];
+		const auto& interrupters = pages::interrupters[page_index];
 		const auto& rune_indices = pages::rune_indices[page_index];
 		
 		std::cout << "page_index: " << +page_index << std::endl;
@@ -38,9 +38,9 @@ void test_pages()
 		else
 			std::cout << "images: " << *images.begin() << std::endl;
 		
-		std::cout << "interupters: ";
-		for(const auto interupter : interupters)
-			std::cout << interupter << ", ";
+		std::cout << "interrupters: ";
+		for(const auto interrupter : interrupters)
+			std::cout << interrupter << ", ";
 		std::cout << std::endl;
 
 		std::cout << "runes: [";
@@ -63,7 +63,7 @@ void test_processed_text()
 
 void test_transformer()
 {
-	for (size_t page_index = 0; page_index < pages::images.size(); page_index++)
+	for (core::PageIndex page_index = 0; page_index < pages::images.size(); page_index++)
 	{
 		const auto& images = pages::images[page_index];
 		const auto& transformers = pages::transformers[page_index];
@@ -89,17 +89,14 @@ void test_transformer()
 
 void test_latin()
 {
-	std::string runes;
-	std::vector<uint8_t> rune_indices;
-
-	std::cout << "core::to_runes(\"RING\").value_or(\"\")" << std::endl;
+	core::Runes runes;
+	core::RuneIndices rune_indices;
 
 	runes = core::to_runes("RING").value_or("");
 	std::cout << "runes: " << runes << std::endl;
 
-	rune_indices = core::to_rune_indices(runes).value_or(std::vector<uint8_t>({}));
+	rune_indices = core::to_rune_indices(runes).value_or(core::RuneIndices({}));
 	std::cout << rune_indices.size() << std::endl;
-	
 }
 
 void test_math()
@@ -121,7 +118,7 @@ void test_math()
 
 void test_speed()
 {
-	for (size_t page_index = 0; page_index < pages::images.size(); page_index++)
+	for (core::PageIndex page_index = 0; page_index < pages::images.size(); page_index++)
 	{
 		const auto& images = pages::images[page_index];
 		const auto& transformers = pages::transformers[page_index];
@@ -173,7 +170,7 @@ void test_sequence()
 	}
 
 	// Make transformer
-	const std::vector<size_t> interrupt_indices = { 56 };
+	const core::RuneInterruptIndices interrupt_indices = { 56 };
 	std::unique_ptr<Transformer> tf = std::make_unique<transformer::Sequence>(sequence, interrupt_indices);
 	
 	// Create text processor

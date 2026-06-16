@@ -20,7 +20,7 @@ void test_sequence();
 
 	Uses oeis sequences and decrypt it with transformer::Sequence.
 	It has multithread support that split appart the work in chunks.
-	Second it has interupter indices generater that takes all interrupters for each page and iterate all combinations that can exist.
+	Second it has interrupter indices generater that takes all interrupters for each page and iterate all combinations that can exist.
 	This way we can decrypt with high confidence words more perfect.
 */
 void sequence_bruteforce();
@@ -30,7 +30,7 @@ void sequence_bruteforce();
 
 	Uses oeis sequences and decrypt it with transformer::Vigenere.
 	It has multithread support that split appart the work in chunks.
-	Second it has interupter indices generater that takes all interrupters for each page and iterate all combinations that can exist.
+	Second it has interrupter indices generater that takes all interrupters for each page and iterate all combinations that can exist.
 	This way we can decrypt with high confidence words more perfect.
 */
 void vigenere_bruteforce();

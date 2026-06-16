@@ -27,7 +27,7 @@ namespace util::screen
 {
 	void clear();
 	void wait_for_enter();
-	std::string highlight_words(std::string text, std::span<const std::string_view> words, bool is_console = true);
+	std::string highlight_words(const std::string& text, std::span<const std::string_view> words, bool is_console = true);
 }
 
 #endif // UTIL_SCREEN_H

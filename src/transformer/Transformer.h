@@ -1,11 +1,7 @@
 #ifndef TRANSFORMER_H
 #define TRANSFORMER_H
 
-#include <string>
-#include <vector>
-#include <cstdint>
-
-#include <core/ProcessedText.h>
+class ProcessedText;
 
 class Transformer
 {
@@ -18,10 +14,7 @@ class Transformer
 class UnsolvedTransformer : public Transformer
 {
 	public:
-		void transform(ProcessedText& pt) override
-		{
-			pt.SetUnsolved();
-		};
+		void transform(ProcessedText& pt) override;
 };
 
 #endif // TRANSFORMER_H

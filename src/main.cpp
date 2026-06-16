@@ -10,7 +10,7 @@
 
 void show_solved_pages()
 {
-	for (size_t page_index = 0; page_index < pages::images.size(); page_index++)
+	for (core::PageIndex page_index = 0; page_index < pages::images.size(); page_index++)
 	{
 		const auto& images = pages::images[page_index];
 		const auto& transformers = pages::transformers[page_index];
@@ -40,7 +40,7 @@ int main()
 	core::initialize();
 	pages::initialize();
 
-	//show_solved_pages();
+	show_solved_pages();
 	//sequence_bruteforce();
-	vigenere_bruteforce();
+	//vigenere_bruteforce();
 }

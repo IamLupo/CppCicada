@@ -1,32 +1,35 @@
-#ifndef PROCESSED_TEXT_H
-#define PROCESSED_TEXT_H
+#ifndef CORE_PROCESSED_TEXT_H
+#define CORE_PROCESSED_TEXT_H
 
 #include <string>
 #include <vector>
 #include <cstdint>
 
+#include <core/types.h>
+#include <pages.h>
+
 class ProcessedText
 {
 	private:
-		std::string_view     _content;
-		std::vector<uint8_t> _rune_indices;
-		bool                 _unsolved;
+		core::PageContent _content;
+		core::RuneIndices  _rune_indices;
+		bool               _unsolved;
 	
 	public:
 		ProcessedText();
 		ProcessedText(size_t page_index);
-		ProcessedText(const std::string_view& content, const std::vector<uint8_t>& rune_indices);
+		ProcessedText(const core::PageContent content, const core::RuneIndices& rune_indices);
 		~ProcessedText();
 
 		void SetSolved()   { this->_unsolved = false; }
 		void SetUnsolved() { this->_unsolved = true;  }
 
-		std::vector<uint8_t>& rune_indices()
+		core::RuneIndices& rune_indices()
 		{
 			return _rune_indices;
 		}
 
-		const std::vector<uint8_t>& rune_indices() const
+		const core::RuneIndices& rune_indices() const
 		{
 			return _rune_indices;
 		}
@@ -34,4 +37,4 @@ class ProcessedText
 		std::string get_latin_text(size_t target = -1);
 };
 
-#endif // PROCESSED_TEXT_H
+#endif // CORE_PROCESSED_TEXT_H
